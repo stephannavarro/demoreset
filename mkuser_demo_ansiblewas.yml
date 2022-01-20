@@ -1,5 +1,5 @@
 ---
-- hosts: powervc10
+- hosts: RadarPowerVC
   gather_facts: False
   user: root
   tasks:
@@ -29,7 +29,7 @@
       
   - name: assigin  role to project
     os_user_role:
-      cloud: powervc10
+      cloud: devstack
       user: "{{ user_name}}"
       role:  "{{item}}" 
       project: snproject
@@ -38,8 +38,8 @@
 
 
   
-- hosts: control
-  gather_facts: false
+- hosts: RadarLinuxVM
+  gather_facts: False
   user: root
   tasks:
 

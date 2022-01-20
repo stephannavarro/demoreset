@@ -14,7 +14,7 @@
 
   - name: listing all VMs
     os_server_info:
-      cloud: powervc10_snproject
+      cloud: devstack
       #filters:
       #  vm_state: active
     register: vm
@@ -58,7 +58,7 @@
       project: snproject
     loop: "{{ roles_list }}"
 
-- hosts: powervc10
+- hosts: RadarPowerVC
   gather_facts: False 
   user: root
 
@@ -75,7 +75,7 @@
       path: "/home/{{ user_name }}"
       state: absent
   
-- hosts: control
+- hosts: RadarLinuxVM
   gather_facts: False
   user: root
 
