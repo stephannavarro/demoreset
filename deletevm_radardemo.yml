@@ -1,0 +1,46 @@
+---
+- hosts: localhost
+  gather_facts: False 
+  vars:
+    roles_list:
+      - vm_manager      
+
+  tasks:
+
+  - name: listing all VMs
+    os_server_info:
+      cloud: devstack
+      #filters:
+      #  vm_state: active
+    register: vm
+    tags: deletevm
+
+  - debug:
+      msg: "{{ vm | json_query('openstack_servers[*].{name: name}')  }}"
+    tags: deletevm
+
+  #- name: deleting all VMs and disks
+    #os_server:
+      #cloud: powervc10_snproject
+      #timeout: 900
+      #state: absent
+      #name: "{{ item.name }}"
+      #terminate_volume: no
+      #wait: yes
+    #tags: deletevm
+    #with_items :  "{{ vm | json_query('openstack_servers[*].{name: name}')  }}"
+
+  - name: showing disks to delete
+    debug:
+      msg: "{{ vm | json_query('openstack_servers[*].{name: name, volumes: volumes} ')  }}"
+    tags: deletevm
+
+  #- name: deleting disks
+    #os_volume:
+      #cloud: powervc10_snproject
+      #display_name:  "{{item}}"
+      #state: absent
+      #wait: no
+    #tags: deletedisks , deletevm 
+    #with_items: "{{ vm| json_query('openstack_servers[*].volumes[*].id') }}"
+  
