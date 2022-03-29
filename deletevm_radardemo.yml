@@ -29,6 +29,8 @@
       wait: yes
     tags: deletevm
     with_items :  "{{ vm | json_query('openstack_servers[*].{name: name}')  }}"
+    loop_control:
+      pause: 10
 
   - name: showing disks to delete
     debug:
