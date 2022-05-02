@@ -37,6 +37,10 @@
       msg: "{{ vm | json_query('openstack_servers[*].{name: name, volumes: volumes} ')  }}"
     tags: deletevm
 
+  - name: Pause for 1 minutes before disk delete
+    pause:
+      minutes: 1
+
   - name: deleting disks
     os_volume:
       cloud: devstack
