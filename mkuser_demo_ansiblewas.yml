@@ -14,7 +14,7 @@
       ssh_key_file: .ssh/id_rsa
       password: "{{  user_password | password_hash('sha512') }}"
 
-  - name: Pause for 1 minutes before disk delete
+  - name: Pause for 1 minutes 
     pause:
       minutes: 1
 
