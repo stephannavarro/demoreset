@@ -1,0 +1,61 @@
+---
+- hosts: RadarPowerVC
+  gather_facts: False
+  user: root
+  tasks:
+
+  - name: creating user / changing password
+    user:
+      state: present
+      name: "{{ user_name }}"
+      groups: powervc-filter
+      generate_ssh_key: yes
+      ssh_key_bits: 1024
+      ssh_key_file: .ssh/id_rsa
+      password: "{{  user_password | password_hash('sha512') }}"
+
+  - name: Pause for 1 minutes 
+    pause:
+      minutes: 1
+
+- hosts: localhost
+  gather_facts: False 
+  vars:
+    roles_list: 
+      #- vm_user
+      #- deployer
+      #- self_service
+      #- image_manager
+      #- storage_manager
+      - vm_manager
+
+  tasks:
+      
+  - name: assigin  role to project
+    os_user_role:
+      cloud: devstack
+      user: "{{ user_name}}"
+      role:  "{{item}}" 
+      project: "{{ project_name }}" 
+      state: present
+    loop: "{{ roles_list }}"
+
+
+  
+- hosts: RadarLinuxVM
+  gather_facts: False
+  user: root
+  tasks:
+
+  #- name: creating groupd
+  #  group: 
+  #    name: 
+  - name: creating user / changing password
+    user:
+      state: present
+      name: "{{ user_name }}"
+      generate_ssh_key: yes
+      ssh_key_bits: 1024
+      ssh_key_file: .ssh/id_rsa
+      password: "{{ user_password | password_hash('sha512') }}"
+
