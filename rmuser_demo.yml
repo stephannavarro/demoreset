@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  gather_facts: False 
+  vars:
+    roles_list:
+      - vm_manager      
+
+  tasks:
+
+  - name: removing role from  project
+    os_user_role:
+      state: absent
+      cloud: devstack
+      user: "{{ user_name }}"
+      role: "{{ item }}"
+      project: "{{ project_name }}"
+    loop: "{{ roles_list }}"
+
+- hosts: RadarPowerVC
+  gather_facts: False 
+  user: root
+
+  tasks:
+
+  - name: deleting user
+    user:
+      state: absent 
+      name: "{{ user_name }}"
+      force: yes 
+  
+  - name: deleting home directory for user "{{ user_name }}"
+    file: 
+      path: "/home/{{ user_name }}"
+      state: absent
+  
+- hosts: RadarLinuxVM
+  gather_facts: False
+  user: root
+
+  tasks:
+
+  - name: deleting 
+    user:
+      state: absent 
+      name: "{{ user_name }}"
+      force: yes 
+
+  - name: deleting home directory for user "{{ user_name }}"
+    file: 
+      path: "/home/{{ user_name }}"
+      state: absent
